@@ -11,18 +11,25 @@ function printResult () {
   fi
 }
 
-test 1      = $(echo 1 | ./fizz_buzz.awk); printResult $?
-test 2      = $(echo 2 | ./fizz_buzz.awk); printResult $?
-test "Fizz" = $(echo 3 | ./fizz_buzz.awk); printResult $?
-test 4      = $(echo 4 | ./fizz_buzz.awk); printResult $?
-test "Buzz" = $(echo 5 | ./fizz_buzz.awk); printResult $?
-test "Fizz" = $(echo 6 | ./fizz_buzz.awk); printResult $?
-test 7      = $(echo 7 | ./fizz_buzz.awk); printResult $?
-test 8      = $(echo 8 | ./fizz_buzz.awk); printResult $?
-test "Fizz" = $(echo 9 | ./fizz_buzz.awk); printResult $?
-test "Buzz" = $(echo 10 | ./fizz_buzz.awk); printResult $?
-test 11     = $(echo 11 | ./fizz_buzz.awk); printResult $?
-test "Fizz" = $(echo 12 | ./fizz_buzz.awk); printResult $?
-test 13     = $(echo 13 | ./fizz_buzz.awk); printResult $?
-test 14     = $(echo 14 | ./fizz_buzz.awk); printResult $?
-test "FizzBuzz" = $(echo 15 | ./fizz_buzz.awk); printResult $?
+function testTemplate () {
+  echo $1
+  echo "params:" $2
+  echo "expect:" $3
+  for numbers in $2
+  do
+  test $3 = $(echo $numbers | ./fizz_buzz.awk); printResult $?
+  done
+}
+
+multiple_of_3=$(seq 3 3 100)
+multiple_of_3_without_multiple_15="$(echo "$multiple_of_3" | awk '{for (i=1; i<=NF; i++) if ($1 % 15 != 0) { printf("%s ", $1) } }' | awk '{sub(/[ \t]+$/, "")}1')"
+
+multiple_of_5=$(seq 5 5 100)
+multiple_of_5_without_multiple_15="$(echo "$multiple_of_5" | awk '{for (i=1; i<=NF; i++) if ($1 % 15 != 0) { printf("%s ", $1) } }' | awk '{sub(/[ \t]+$/, "")}1')"
+
+multiple_of_15=$(seq 15 15 100)
+
+testTemplate "3の倍数且つ15の倍数を除いた数でFizzを返すかどうか" "$multiple_of_3_without_multiple_15" "Fizz"
+testTemplate "5の倍数且つ15の倍数を除いた数でBuzzを返すかどうか" "$multiple_of_5_without_multiple_15" "Buzz"
+testTemplate "15の倍数でFizzBuzzを返すかどうか" "$multiple_of_15" "FizzBuzz"
+
