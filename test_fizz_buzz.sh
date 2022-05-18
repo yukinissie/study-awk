@@ -1,12 +1,13 @@
 #!/bin/sh
 
+ESC=$(printf '\033')
+
 function printResult () {
-  result=''
   if [[ $1 -eq 0 ]]; then
-    echo 'Success!'
+    printf "${ESC}[32mSuccess!${ESC}[m\n"
   fi
   if [[ $1 -eq 1 ]]; then
-    echo 'Failed...'
+    printf "${ESC}[31mFailed...${ESC}[m\n" 1>&2
   fi
 }
 
