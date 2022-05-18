@@ -4,10 +4,10 @@ ESC=$(printf '\033')
 
 function printResult () {
   if [[ $1 -eq 0 ]]; then
-    printf "${ESC}[32mSuccess!${ESC}[m\n"
+    printf "${ESC}[92mSuccess!${ESC}[m\n"
   fi
   if [[ $1 -eq 1 ]]; then
-    printf "${ESC}[31mFailed...${ESC}[m\n" 1>&2
+    printf "${ESC}[91mFailed...${ESC}[m\n" 1>&2
   fi
 }
 
